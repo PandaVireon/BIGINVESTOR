@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vireon Registration — Create Your Account</title>
+<meta name="description" content="Create your free Vireon account in under 2 minutes. No fees. Instant access.">
+<meta name="theme-color" content="#00f2fe">
+<link rel="canonical" href="https://vireonplatform.ng/signup">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- PRECONNECT & FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCHEMA MARKUP
+══════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://vireonplatform.ng/signup#webpage",
+  "url": "https://vireonplatform.ng/signup",
+  "name": "Join Vireon Free — Create Your Account",
+  "description": "Create your free Vireon account in under 2 minutes."
+}
+</script>
+
+<style>
+:root {
+  --vireon-cyan: #00f2fe;
+  --vireon-blue: #4facfe;
+  --vireon-dark: #080d1a;
+  --vireon-card: #0f172a;
+  --vireon-input: #1e293b;
+  --border: rgba(255, 255, 255, 0.1);
+  --white: #ffffff;
+  --red: #ff4d4d;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background-color: var(--vireon-dark);
+  background-image: radial-gradient(circle at top, #111e38 0%, #080d1a 100%);
+  color: var(--white);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 15px;
+}
+
+/* SUCCESS OVERLAY & ANIMATION STYLES */
+.success-overlay {
+  display: none; 
+  position: fixed; 
+  inset: 0;
+  background: rgba(3, 10, 22, 0.98); 
+  z-index: 1000;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center;
+  gap: 16px;
+  padding: 30px;      
+  text-align: center; 
+}
+.success-overlay.show { 
+  display: flex; 
+  animation: fadeInUp 0.4s ease; 
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.success-checkmark {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 10px;
+}
+.checkmark-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: var(--vireon-cyan);
+  fill: none;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+.checkmark-check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  stroke-width: 3;
+  stroke: var(--vireon-cyan);
+  fill: none;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+}
+
+@keyframes stroke {
+  100% { stroke-dashoffset: 0; }
+}
+
+.btn-proceed {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  border-radius: 12px;
+  color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.1);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.btn-proceed:hover {
+  background: rgba(0, 242, 254, 0.08);
+  border-color: rgba(0, 242, 254, 0.6);
+  transform: translateY(-2px);
+}
+
+/* MAIN CARD CONTAINER */
+.signup-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--vireon-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 35px 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.card-header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.card-header p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* FORM STYLING */
+.form-group { margin-bottom: 16px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.input-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 1;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+input, select {
+  width: 100%;
+  padding: 12px 14px 12px 40px;
+  background: var(--vireon-input);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: var(--white);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+input:focus, select:focus {
+  border-color: var(--vireon-cyan);
+  box-shadow: 0 0 0 2px rgba(0, 242, 254, 0.15);
+}
+
+input.input-valid { border-color: #00e6a8; }
+input.input-error { border-color: var(--red); }
+input::placeholder, select option[disabled] { color: rgba(255, 255, 255, 0.3); }
+
+select { cursor: pointer; appearance: none; -webkit-appearance: none; }
+select option { background: var(--vireon-card); color: var(--white); }
+
+/* FIELD ERRORS & PASSWORD STRENGTH */
+.field-error { font-size: 11px; color: var(--red); margin-top: 4px; display: none; }
+.field-error.show { display: block; }
+
+.pw-strength { margin-top: 6px; height: 3px; border-radius: 3px; background: rgba(255,255,255,0.1); overflow: hidden; }
+.pw-strength-bar { height: 100%; width: 0; border-radius: 3px; transition: width 0.3s, background 0.3s; }
+.pw-strength-label { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+
+/* EYE BUTTON */
+.eye-btn {
+  position: absolute; right: 14px;
+  background: none; border: none;
+  color: var(--vireon-cyan); cursor: pointer;
+  padding: 0; font-size: 13px;
+  z-index: 10;
+}
+
+/* SUBMIT BUTTON */
+.btn-submit {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--vireon-cyan), var(--vireon-blue));
+  color: var(--vireon-dark);
+  font-family: inherit;
+  font-size: 14px; font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none; border-radius: 10px; cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  margin-top: 10px;
+}
+.btn-submit:hover { opacity: 0.95; transform: translateY(-1px); }
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.form-footer { margin-top: 20px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.5); }
+.form-footer a { color: var(--vireon-cyan); text-decoration: none; font-weight: 700; }
+.form-footer a:hover { text-decoration: underline; }
+
+.terms-text { font-size: 11px; color: rgba(255,255,255,0.4); text-align: center; margin-top: 14px; line-height: 1.5; }
+.terms-text a { color: var(--vireon-cyan); text-decoration: none; }
+
+@media(max-width: 580px) {
+  .signup-card { padding: 25px 20px; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="success-overlay" id="successOverlay" role="alert" aria-live="assertive">
+  <svg class="success-checkmark" viewBox="0 0 52 52">
+    <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+  </svg>
+  <h2 id="welcomeText" style="font-family: 'Times New Roman', Times, serif; font-weight: bold; font-size: clamp(32px, 5vw, 40px); background: linear-gradient(135deg, #ffffff, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;">WELCOME</h2> 
+  <p id="accountStatus" style="text-transform: capitalize; color: #ffffff9a; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; letter-spacing: 0.5px; font-size: 12px; opacity: 0.95; margin: 4px 0 0 0;">Your account has been created successfully, Proceed to your dashboard to continue!</p>
+  <button type="button" id="proceedBtn" class="btn-proceed" aria-label="Proceed to dashboard">
+    PROCEED TO DASHBOARD <i class="fa-solid fa-arrow-right-long" style="font-size: 14px;"></i>
+  </button>
+</div>
+
+<main class="signup-card">
+  <div class="card-header">
+    <h1>Create Your Account</h1>
+    <p>Fill in your details below to get started</p>
+  </div>
+
+  <form id="signupForm" novalidate>
+
+    <div class="form-group">
+      <label for="fullname">Full Name <span aria-hidden="true" style="color:var(--red)">*</span></label>
+      <div class="input-wrap">
+        <span class="input-icon" aria-hidden="true">👤</span>
+        <input type="text" id="fullname" name="fullname" placeholder="John Doe"
+          required autocomplete="name" aria-required="true" aria-describedby="fullname-error"
+          minlength="2" maxlength="80">
+      </div>
+      <p class="field-error" id="fullname-error" role="alert">Please enter your full name.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="username">Vireon Username <span aria-hidden="true" style="color:var(--red)">*</span></label>
+      <div class="input-wrap">
+        <span class="input-icon" style="font-style:normal;font-weight:700;color:var(--vireon-cyan)">@</span>
+        <input type="text" id="username" name="username" placeholder="vireon_001"
+          required aria-required="true" aria-describedby="username-error"
+          pattern="[a-zA-Z0-9_]{3,20}" minlength="3" maxlength="20">
+      </div>
+      <p class="field-error" id="username-error" role="alert">3–20 characters, letters, numbers and underscores only.</p>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label for="email">Email Address <span aria-hidden="true" style="color:var(--red)">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon" aria-hidden="true">✉️</span>
+          <input type="email" id="email" name="email" placeholder="you@email.com"
+            required autocomplete="email" aria-required="true" aria-describedby="email-error">
+        </div>
+        <p class="field-error" id="email-error" role="alert">Please enter a valid email address.</p>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number <span aria-hidden="true" style="color:var(--red)">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon" aria-hidden="true">📞</span>
+          <input type="tel" id="phone" name="phone" placeholder="08123456789"
+            required autocomplete="tel" aria-required="true" aria-describedby="phone-error">
+        </div>
+        <p class="field-error" id="phone-error" role="alert">Phone number must be at least 11 digits.</p>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="password">Password <span aria-hidden="true" style="color:var(--red)">*</span></label>
+        <div class="input-wrap"> 
+          <span class="input-icon" aria-hidden="true">🔒</span>
+          <input type="password" id="password" name="password" placeholder="Create a password"
+            required autocomplete="new-password" aria-required="true" aria-describedby="password-error password-strength-label"
+            minlength="8" style="padding-right: 45px;"> 
+          <button type="button" id="togglePassword" class="eye-btn" aria-label="Toggle password visibility">
+            <i class="fa-solid fa-eye-slash" id="eyeIcon"></i>
+          </button>
+        </div>
+        <div class="pw-strength" aria-hidden="true"><div class="pw-strength-bar" id="pw-bar"></div></div>
+        <div class="pw-strength-label" id="password-strength-label" aria-live="polite"></div>
+        <p class="field-error" id="password-error" role="alert">Password must be at least 8 characters.</p>
+      </div>
+
+      <div class="form-group">
+        <label for="country">Country <span aria-hidden="true" style="color:var(--red)">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon" aria-hidden="true">🌍</span>
+          <select id="country" name="country" required aria-required="true" aria-describedby="country-error">
+            <option value="" disabled selected>Select country</option>
+            <option value="NG">Nigeria</option>
+            <option value="GH">Ghana</option>
+            <option value="CM">Cameroon</option>
+            <option value="KE">Kenya</option>
+            <option value="ZA">South Africa</option>
+            <option value="EG">Egypt</option>
+            <option value="UG">Uganda</option>
+            <option value="CI">Côte d'Ivoire</option>
+            <optgroup label="International">
+              <option value="GB">Europe</option>
+              <option value="US">United States</option>
+              <option value="CA">Others</option>
+            </optgroup>
+          </select>
+        </div>
+        <p class="field-error" id="country-error" role="alert">Please select your country.</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="referral">INVITER REFERENCE</label>
+      <div class="input-wrap">
+        <span class="input-icon" aria-hidden="true">✦</span>
+        <input type="text" id="referral" name="referral" value="REF - COACHPREMA" 
+               readonly autocomplete="off" style="cursor: default;">
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-top: 12px;">
+      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:12px;color:rgba(255,255,255,0.6);text-transform:none;">
+        <input type="checkbox" id="consent" name="consent" style="width:16px;height:16px;padding:0;margin-top:1px;flex-shrink:0;accent-color:var(--vireon-cyan);">
+        <span>Accept Vireon's <a href="privacy.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a>.</span>
+      </label>
+    </div>
+
+    <button type="submit" class="btn-submit" id="submitBtn">
+      <span>Create Vireon Account ✦</span>
+    </button>
+
+    <div class="form-footer">
+      Already have an account? 
+      <a href="login.html">Sign in</a>
+    </div>
+
+    <p class="terms-text">
+      🔒 Your data is protected by SSL encryption. Read our <a href="privacy.html">Privacy Policy</a>.
+    </p>
+  </form>
+</main>
+
+<script type="module">
+  // 1. IMPORT FIREBASE
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  // 2. FIREBASE CONFIG (UNCHANGED)
+  const firebaseConfig = {
+    apiKey: "AIzaSyBwJcDKUMTIFGchNbiVImnlshWkQa0Nhwg",
+    authDomain: "glamour-v2.firebaseapp.com",
+    databaseURL: "https://glamour-v2-default-rtdb.firebaseio.com",
+    projectId: "glamour-v2",
+    storageBucket: "glamour-v2.firebasestorage.app",
+    messagingSenderId: "705910482349",
+    appId: "1:705910482349:web:8aea0c23ac96ac93902d24"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  /* ── PASSWORD STRENGTH ── */
+  document.getElementById('password').addEventListener('input', function() {
+    const val = this.value;
+    const bar = document.getElementById('pw-bar');
+    const label = document.getElementById('password-strength-label');
+    let score = 0;
+    if (val.length > 0) {
+      if (val.length <= 2) score = 1;
+      else if (val.length <= 4) score = 2;
+      else if (val.length >= 5) {
+        score = 3;
+        if (val.length >= 8 && /[0-9]/.test(val) && /[!@#$%^&*]/.test(val)) score = 4;
+      }
+    }
+    const colors = ['#ff4d4d', '#ff944d', '#00f2fe', '#00ff40'];
+    const labels = ['Too short', 'Weak', 'Good', 'Strong'];
+    bar.style.width = (score * 25) + '%';
+    bar.style.background = colors[score - 1] || 'transparent';
+    label.textContent = val.length > 0 ? labels[score - 1] || '' : '';
+  }, { passive: true });
+
+  /* ── LIVE VALIDATION CONFIG & RULES ── */
+  const rules = {
+    fullname: { min: 2, msg: 'Please enter your full name.' },
+    email: { pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, msg: 'Please enter a valid email address.' },
+    phone: { pattern: /^[0-9+]{11,15}$/, msg: 'Phone number must be at least 11 digits.' },
+    username: { pattern: /^[a-zA-Z0-9_]{3,20}$/, msg: '3–20 characters, letters, numbers and underscores only.' },
+    password: { min: 8, msg: 'Password must be at least 8 characters.' },
+    country: { required: true, msg: 'Please select your country.' }
+  };
+
+  function validateField(input, rule) {
+    const val = input.value.trim();
+    const errEl = document.getElementById(input.id + '-error');
+    let valid = true;
+    if (rule.required && !val) valid = false;
+    if (rule.min && val.length < rule.min) valid = false;
+    if (rule.pattern && !rule.pattern.test(val)) valid = false;
+
+    input.classList.toggle('input-valid', valid && val.length > 0);
+    input.classList.toggle('input-error', !valid);
+    if (errEl) {
+      errEl.classList.toggle('show', !valid);
+    }
+    return valid;
+  }
+
+  Object.entries(rules).forEach(([id, rule]) => {
+    const input = document.getElementById(id);
+    if (!input) return;
+    input.addEventListener('blur', () => {
+      if(input.value.trim().length > 0) {
+        validateField(input, rule);
+      }
+    }, { passive: true });
+  });
+
+  /* ── SUBMIT HANDLER (UNCHANGED) ── */
+  document.getElementById('signupForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    let hasErrors = false;
+
+    Object.entries(rules).forEach(([id, rule]) => {
+      const input = document.getElementById(id);
+      if (input) {
+        const isValid = validateField(input, rule);
+        if (!isValid) hasErrors = true;
+      }
+    });
+
+    if (hasErrors) {
+      return; 
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.innerText = "VERIFYING...";
+    btn.disabled = true;
+
+    const username = document.getElementById('username').value.trim().toLowerCase();
+    const country = document.getElementById('country').value;
+
+    try {
+      await signInAnonymously(auth);
+      const userRef = doc(db, 'users', username);
+      const userSnap = await getDoc(userRef);
+      if(userSnap.exists()) {
+        const usrInput = document.getElementById('username');
+        usrInput.classList.add('input-error');
+        const usrErr = document.getElementById('username-error');
+        if (usrErr) {
+          usrErr.innerText = "Username already taken.";
+          usrErr.classList.add('show');
+        }
+        throw new Error("Username already taken.");
+      }
+
+      let fee = country === "GH" ? "230 GHC" : (country === "CM" ? "13,500 XAF" : "₦14,500");
+
+      await setDoc(userRef, {
+        fullName: document.getElementById('fullname').value,
+        username: username,
+        email: document.getElementById('email').value.trim().toLowerCase(),
+        phone: document.getElementById('phone').value,
+        password: document.getElementById('password').value,
+        country: country,
+        referrer: document.getElementById('referral').value || "None",
+        regFee: fee,
+        balance: 12500,
+        joinedAt: new Date().toISOString(),
+        status: 'active'
+      });
+
+       // LOCALSTORAGE SAVES (UNCHANGED)
+      localStorage.setItem('vireon_username', username);
+      localStorage.setItem('fullname', document.getElementById('fullname').value);
+      localStorage.setItem('email', document.getElementById('email').value.trim().toLowerCase());
+      localStorage.setItem('phone', document.getElementById('phone').value);
+
+      const userData = {
+          fullName: document.getElementById('fullname').value,
+          username: username,
+          email: document.getElementById('email').value.trim().toLowerCase(),
+          phone: document.getElementById('phone').value,
+          amount: "₦14,500"
+      };
+
+      localStorage.setItem('vireon_pending_user', JSON.stringify(userData));
+
+      // SHOW OVERLAY
+      const overlay = document.getElementById('successOverlay');
+      if (overlay) overlay.classList.add('show');
+
+      const proceedBtn = document.getElementById('proceedBtn');
+      if (proceedBtn) {
+        proceedBtn.addEventListener('click', function() {
+          window.location.href = 'dashboard.html';
+        });
+      }
+
+    } catch (err) {
+      btn.innerText = "Create Vireon Account ✦";
+      btn.disabled = false;
+      if (err.message !== "Username already taken.") {
+        alert(err.message);
+      }
+    }
+  });
+
+  /* ── EYE TOGGLE ── */
+  document.getElementById('togglePassword').addEventListener('click', function () {
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      if (type === 'password') eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+      else eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+  });
+
+  /* ── PERSONALIZATION LOGIC ── */
+  (function() {
+      const overlay = document.getElementById('successOverlay');
+      if (!overlay) return;
+
+      const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+              try {
+                  if (mutation.target.classList.contains('show')) {
+                      const usernameEl = document.getElementById('username');
+                      const welcomeTitle = document.getElementById('welcomeText');
+                      
+                      if (usernameEl) {
+                          const userVal = usernameEl.value.trim();
+                          if (welcomeTitle && userVal) {
+                              welcomeTitle.innerText = `WELCOME, ${userVal.toUpperCase()}`;
+                          }
+                      }
+                  }
+              } catch (err) {
+                  console.error("Personalization logic error: ", err);
+              }
+          });
+      });
+
+      observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+  })();
+</script>
+</body>
+</html>

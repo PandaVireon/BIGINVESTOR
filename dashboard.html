@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vireon Digital - User Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        
+        :root {
+            --vireon-cyan: #00f2fe;
+            --vireon-blue: #4facfe;
+            --vireon-black: #050811;
+            --vireon-card: #0b1120;
+        }
+
+        body { 
+            background-color: var(--vireon-black); 
+            color: #ffffff; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            padding-bottom: 120px;
+            overflow-x: hidden;
+        }
+
+        .vireon-text {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .balance-card {
+            background: linear-gradient(145deg, #0d1527, #050811);
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 242, 254, 0.1);
+        }
+
+        .feature-card {
+            background: var(--vireon-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .feature-card:active {
+            transform: scale(0.96);
+            background: #10192d;
+        }
+
+        .icon-box {
+            width: 44px; height: 44px; border-radius: 12px;
+            background: rgba(0, 242, 254, 0.1);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--vireon-cyan); font-size: 1.1rem;
+        }
+
+        .live-ticker {
+            background: linear-gradient(90deg, #00f2fe, #4facfe);
+            color: #000;
+            white-space: nowrap; overflow: hidden;
+            font-weight: 900; font-size: 10px; padding: 8px 0;
+            text-transform: uppercase; letter-spacing: 1.5px;
+        }
+
+        .ticker-move {
+            display: inline-block;
+            animation: scroll 40s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .nav-blur {
+            background: rgba(5, 8, 17, 0.85);
+            backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(0, 242, 254, 0.15);
+        }
+
+        .popup-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(15px);
+            z-index: 2000; display: none;
+            align-items: center; justify-content: center; padding: 20px;
+        }
+
+        .activate-gradient {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            color: #000; font-weight: 800;
+        }
+        
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+                transform: scale(1);
+            }
+            70% {
+                box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+                transform: scale(1.05);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+                transform: scale(1);
+            }
+        }
+
+        .active-pulse-green {
+            animation: pulse-glow 2s infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Profile Header -->
+    <div class="px-6 pt-10 pb-4 flex justify-between items-end">
+        <div>
+            <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.3em] mb-1">WELCOME,</p>
+            <h1 class="text-2xl font-black italic vireon-text" id="userDisplay">@VireonUser</h1>
+        </div>
+        <div class="bg-zinc-900/50 border border-zinc-800 px-4 py-2 rounded-full flex items-center gap-2">
+            <div class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+            <span class="text-[10px] font-black text-zinc-300 uppercase tracking-tighter" id="countryDisplay">Detecting...</span>
+        </div>
+    </div>
+
+    <!-- Portfolio Card -->
+    <div class="px-6 mb-8">
+        <div class="balance-card p-8">
+            <div class="flex justify-between items-start mb-1">
+                <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">TOTAL BALANCE</span>
+                <i class="fas fa-bolt vireon-text text-xl"></i>
+            </div>
+            <div class="text-5xl font-extrabold tracking-tighter italic" id="mainBalance">...</div>
+            
+            <div class="mt-10 grid grid-cols-2 gap-4">
+                <button onclick="openActivation()" class="activate-gradient py-4 rounded-3xl text-[9.5px] uppercase tracking-widest shadow-xl active:scale-95 transition-transform">
+                    Activate Account
+                </button>
+                <button onclick="handleAction('Withdrawals')" class="bg-white/5 border border-white/10 py-4 rounded-3xl text-[10px] uppercase tracking-widest font-bold active:scale-95 transition-transform">
+                    Withdraw
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticker -->
+    <div class="live-ticker mb-8">
+        <div class="ticker-move" id="dynamicTicker">
+            WELCOME TO YOUR VIREON DIGITAL DASHBOARD • SYSTEM ONLINE • WITHDRAWALS OPEN TUESDAYS & SATURDAYS • ACTIVATION IS INSTANT • VIREON ECOSYSTEM ACTIVE
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 gap-4 px-6 mb-10">
+        <div class="bg-zinc-900/40 border border-zinc-800/60 p-5 rounded-3xl">
+            <p class="text-[9px] font-bold text-zinc-500 uppercase mb-2">Network Earnings</p>
+            <p class="text-xl font-bold vireon-text" id="indirectIncome">0</p>
+        </div>
+        <div class="bg-zinc-900/40 border border-zinc-800/60 p-5 rounded-3xl text-right">
+            <p class="text-[9px] font-bold text-zinc-500 uppercase mb-2">Vireon Status</p>
+            <p class="text-xl font-bold text-white italic">TIER 1</p>
+        </div>
+    </div>
+
+    <!-- 9 Vireon Features -->
+    <div class="px-6 mb-10">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-[11px] font-black uppercase tracking-widest text-zinc-500">Vireon Ecosystem</h3>
+            <span class="bg-cyan-950 text-cyan-400 border border-cyan-800/50 text-[8px] px-2 py-1 rounded font-bold uppercase">8 Locked</span>
+        </div>
+        
+        <div class="space-y-3">
+            <!-- 1. Vireon Surveys -->
+            <div onclick="handleAction('Vireon Surveys')" class="feature-card p-5 flex items-center gap-4">
+                <div class="icon-box"><i class="fas fa-poll-h"></i></div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-bold">Vireon Surveys</h4>
+                    <p class="text-[9px] text-zinc-500 font-bold uppercase">Complete Quick Surveys & Earn £5</p>
+                </div>
+                <i class="fas fa-lock text-zinc-700 text-xs"></i>
+            </div>
+
+            <!-- 2. Vireon IQ -->
+            <div onclick="handleAction('Vireon IQ')" class="feature-card p-5 flex items-center gap-4">
+                <div class="icon-box"><i class="fas fa-brain"></i></div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-bold">Vireon IQ</h4>
+                    <p class="text-[9px] text-zinc-500 font-bold uppercase">Review Movie Trailers & Feedback</p>
+                </div>
+                <i class="fas fa-lock text-zinc-700 text-xs"></i>
+            </div>
+
+            <!-- 3. CallCash Hub -->
+            <div onclick="handleAction('CallCash')" class="feature-card p-5 flex items-center gap-4">
+                <div class="icon-box"><i class="fas fa-phone-volume"></i></div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-bold">Vireon CallCash</h4>
+                    <p class="text-[9px] text-zinc-500 font-bold uppercase">Earn on Qualifying Calls</p>
+                </div>
+                <i class="fas fa-lock text-zinc-700 text-xs"></i>
+            </div>
+
+            <!-- 4. Vireon Converse -->
+            <div onclick="handleAction('Converse')" class="feature-card p-5 flex items-center gap-4">
+                <div class="icon-box"><i class="fas fa-comments"></i></div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-bold">Vireon Converse</h4>
+                    <p class="text-[9px] text-zinc-500 font-bold uppercase">Remote Client Support Tasks</p>
+                </div>
+                <i class="fas fa-lock text-zinc-700 text-xs"></i>
+            </div>
+
+            <!-- 5. Google Monetization -->
+            <div onclick="handleAction('Google Monetization')" class="feature-card p-5 flex items-center gap-4">
+                <div class="icon-box"><i class="fab fa-google"></i></div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-bold">Google Monetization</h4>
+                    <p class="text-[9px] text-zinc-500 font-bold uppercase">Earn Daily on Online Activities</p>
+                </div>
+                <i class="fas fa-lock text-zinc-700 text-xs"></i>
+            </div>
+
+            <!-- 6. Pin-to-Profit Model -->
+            <div onclick="handleAction('Pin-to-Profit')" class="feature-card p-5 flex items-center gap-4">
+                <div class="icon-box"><i class="fab fa-pinterest"></i></div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-bold">Pin-to-Profit Model</h4>
+                    <p class="text-[9px] text-zinc-500 font-bold uppercase">Upload Pinterest Content & Earn</p>
+                </div>
+                <i class="fas fa-lock text-zinc-700 text-xs"></i>
+            </div>
+
+            <!-- 7. Streak Reward (ACTIVE) -->
+            <div onclick="openStreakModal()" class="feature-card p-5 flex items-center gap-4 cursor-pointer">
+                <div class="icon-box"><i class="fas fa-fire"></i></div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-bold">Streak Reward</h4>
+                    <p class="text-[9px] text-zinc-500 font-bold uppercase">Daily Login Commission Streak</p>
+                </div>
+                <div class="flex items-center gap-1.5 bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-1 rounded-full">
+                    <div class="w-2 h-2 rounded-full bg-emerald-400 active-pulse-green"></div>
+                    <span class="text-[8px] font-black text-emerald-400 uppercase tracking-wider">ACTIVE</span>
+                </div>
+            </div>
+
+            <!-- 8. Vireon Snap Pro -->
+            <div onclick="handleAction('Snap Pro')" class="feature-card p-5 flex items-center gap-4">
+                <div class="icon-box"><i class="fab fa-snapchat"></i></div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-bold">Vireon Snap Pro</h4>
+                    <p class="text-[9px] text-zinc-500 font-bold uppercase">Snapchat Creator & Sound Rewards</p>
+                </div>
+                <i class="fas fa-lock text-zinc-700 text-xs"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referral Link Section -->
+    <div class="px-6 mb-10">
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-[32px]">
+            <p class="text-[10px] font-black uppercase text-zinc-500 mb-4 tracking-widest">Your Vireon Referral Link</p>
+            <div class="flex gap-2">
+                <input type="text" id="refLink" readonly class="bg-black border border-zinc-800 rounded-2xl p-4 text-[10px] text-zinc-400 flex-1 outline-none font-medium">
+                <button onclick="copyRef()" class="bg-zinc-800 px-6 rounded-2xl vireon-text active:scale-90 transition-transform">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="px-6 mb-10 grid grid-cols-2 gap-4">
+        <button onclick="contactSupport()" class="w-full bg-zinc-900 py-5 rounded-[24px] text-[10px] font-black uppercase tracking-[0.2em] border border-zinc-800 text-zinc-300 active:scale-95 transition-transform">
+            Support
+        </button>
+        <button onclick="logout()" class="w-full bg-zinc-950/50 py-5 rounded-[24px] text-[10px] font-black uppercase tracking-[0.2em] border border-zinc-900 text-red-700 active:scale-95 transition-transform">
+            LOG OUT
+        </button>
+    </div>
+
+    <!-- Fixed Bottom Nav -->
+    <div class="nav-blur fixed bottom-0 left-0 w-full flex justify-around items-center py-6 px-4 z-50">
+        <div class="flex flex-col items-center gap-1.5 vireon-text">
+            <i class="fas fa-house-chimney text-xl"></i>
+            <span class="text-[8px] font-black uppercase tracking-widest">Home</span>
+        </div>
+        <div onclick="handleAction('Vireon Tasks')" class="flex flex-col items-center gap-1.5 text-zinc-600 active:text-zinc-300 transition-colors">
+            <i class="fas fa-briefcase text-xl"></i>
+            <span class="text-[8px] font-black uppercase tracking-widest">Tasks</span>
+        </div>
+        <div onclick="handleAction('Profile Settings')" class="flex flex-col items-center gap-1.5 text-zinc-600 active:text-zinc-300 transition-colors">
+            <i class="fas fa-user-circle text-xl"></i>
+            <span class="text-[8px] font-black uppercase tracking-widest">Profile</span>
+        </div>
+    </div>
+
+    <!-- Activation Popup -->
+    <div id="activationPopup" class="popup-overlay">
+        <div class="bg-zinc-950 border border-zinc-900 rounded-[45px] w-full max-w-sm p-8 text-center relative overflow-hidden">
+            <div class="w-12 h-1.5 bg-zinc-800 rounded-full mx-auto mb-8"></div>
+            
+            <div id="paymentInitial">
+                <h2 class="vireon-text text-xl font-black italic mb-2 uppercase tracking-tighter">One Time Activation</h2>
+                <p id="feeLabel" class="text-zinc-400 text-[10px] font-black uppercase tracking-widest mb-8">Activation Fee: ₦14,500</p>
+                
+                <div class="bg-black border border-zinc-900 rounded-[35px] p-8 mb-8 text-center">
+                    <p class="text-[9px] text-zinc-500 uppercase font-black mb-6 leading-relaxed tracking-widest">
+                        Instant activation via our verified payment gateway
+                    </p>
+                    <div class="bg-cyan-950/30 border border-cyan-800/30 p-3 rounded-2xl mb-6">
+                        <p class="text-[7px] text-cyan-400 font-bold uppercase tracking-widest">Secure Vireon Gateway Active</p>
+                    </div>
+                    <button onclick="goToPaystack()" class="activate-gradient block w-full py-5 rounded-[22px] text-[11px] font-black uppercase tracking-widest shadow-2xl active:scale-95 transition-all">
+                        Pay Now & Activate
+                    </button>
+                </div>
+
+                <button onclick="closeActivation()" class="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em] block w-full">
+                    Go Back
+                </button>
+            </div>
+
+            <div id="paymentVerifying" class="hidden">
+                <h2 class="vireon-text text-xl font-black italic mb-2 uppercase tracking-tighter">Payment Completed?</h2>
+                <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-8">Waiting for confirmation</p>
+                
+                <div class="bg-black border border-zinc-900 rounded-[35px] p-8 mb-8 text-center">
+                    <p class="text-[9px] text-zinc-500 uppercase font-black mb-6 leading-relaxed tracking-widest">Did you finish the transaction on the payment gateway?</p>
+                    <button onclick="showSocials()" class="activate-gradient w-full py-5 rounded-[22px] text-[11px] font-black uppercase shadow-2xl active:scale-95">
+                        Confirm Payment Now
+                    </button>
+                </div>
+                <button onclick="resetModal()" class="text-[10px] font-black text-zinc-600 uppercase tracking-widest block w-full">Try Payment Again</button>
+            </div>
+
+            <div id="paymentSocials" class="hidden">
+                <h3 class="text-white font-black italic uppercase text-lg mb-2">Final Verification</h3>
+                <p class="text-zinc-500 text-[9px] uppercase font-bold mb-8">Select a platform to send your receipt</p>
+                
+                <div class="space-y-4 mb-6">
+                    <button onclick="sendProof('Telegram')" class="w-full bg-[#229ED9] py-5 rounded-2xl flex items-center justify-center gap-3 active:scale-95 shadow-lg">
+                        <i class="fab fa-telegram text-white text-xl"></i>
+                        <span class="text-[10px] font-black uppercase text-white tracking-widest">Confirm on Telegram</span>
+                    </button>
+
+                    <button onclick="sendProof('WhatsApp')" class="w-full bg-[#25D366] py-5 rounded-2xl flex items-center justify-center gap-3 active:scale-95 shadow-lg">
+                        <i class="fab fa-whatsapp text-white text-xl"></i>
+                        <span class="text-[10px] font-black uppercase text-white tracking-widest">Confirm on WhatsApp</span>
+                    </button>
+                </div>
+                <button onclick="closeActivation()" class="text-[10px] font-black text-zinc-600 uppercase tracking-widest block w-full">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Automatic 24h Streak Reward Claim Popup -->
+    <div id="streakClaimPopup" class="popup-overlay">
+        <div class="bg-zinc-950 border border-zinc-900 rounded-[40px] w-full max-w-sm p-8 text-center shadow-2xl scale-95 transition-all duration-300">
+            <div class="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/20">
+                <i class="fas fa-fire text-emerald-400 text-3xl"></i>
+            </div>
+            <h2 class="vireon-text text-2xl font-black italic mb-2 uppercase">Streak Reward</h2>
+            <p class="text-emerald-400 text-3xl font-black mb-3 tracking-tighter">+₦4,000</p>
+            <p class="text-zinc-400 text-xs font-medium uppercase tracking-wide mb-8 leading-relaxed">
+                Your daily login streak bonus has been unlocked and credited to your account balance.
+            </p>
+            <button onclick="claimStreakReward()" class="activate-gradient w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-xl active:scale-95 transition-transform">
+                Claim ₦4,000 Reward
+            </button>
+        </div>
+    </div>
+
+    <!-- Streak Timer / Already Claimed Modal -->
+    <div id="streakTimerModal" class="popup-overlay">
+        <div class="bg-zinc-950 border border-zinc-900 rounded-[40px] w-full max-w-sm p-8 text-center shadow-2xl scale-95 transition-all duration-300">
+            <div class="w-16 h-16 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-cyan-500/20">
+                <i class="fas fa-clock vireon-text text-3xl"></i>
+            </div>
+            <h2 class="vireon-text text-xl font-black italic mb-2 uppercase">Streak Claimed</h2>
+            <p class="text-zinc-400 text-xs font-medium uppercase tracking-wider mb-6 leading-relaxed">
+                You have already secured today's login reward. Please wait for your next 24-hour cycle to unlock your next streak bonus.
+            </p>
+            
+         <!-- Live Countdown Timer -->
+            <div class="bg-zinc-900/80 border border-zinc-800 rounded-2xl py-4 mb-8">
+                <span class="text-[10px] text-zinc-500 font-black uppercase tracking-widest block mb-1">Next Reward Available In</span>
+                <div id="streakCountdown" class="text-2xl font-black text-white tracking-widest font-mono">00:00:00</div>
+            </div>
+
+            <button onclick="closeStreakTimerModal()" class="w-full py-4 rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 text-[11px] font-black uppercase tracking-widest active:scale-95 transition-all">
+                Dismiss
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, onSnapshot, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBwJcDKUMTIFGchNbiVImnlshWkQa0Nhwg",
+            authDomain: "glamour-v2.firebaseapp.com",
+            databaseURL: "https://glamour-v2-default-rtdb.firebaseio.com",
+            projectId: "glamour-v2",
+            storageBucket: "glamour-v2.firebasestorage.app",
+            messagingSenderId: "705910482349",
+            appId: "1:705910482349:web:8aea0c23ac96ac93902d24"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const currentUsername = localStorage.getItem('vireon_username') || localStorage.getItem('glamour_username') || "VireonGuest";
+        let globalAdminSettings = {
+            bankName: "PALMPAY",
+            accountNumber: "9013801817",
+            accountName: "Yetunde kolawole Esther",
+            redirectLink: "",
+            systemStatus: "active"
+        };
+
+        let currentUserData = null;
+        let countdownInterval = null;
+        const STREAK_REWARD = 4000;
+        const DAY_IN_MS = 24 * 60 * 60 * 1000;
+
+        document.getElementById('userDisplay').innerText = "@" + currentUsername.replace('@', '');
+        document.getElementById('refLink').value = window.location.origin + "/register.html?ref=" + currentUsername;
+
+        const appId = "default-app-id";
+        const settingsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'global');
+        
+        onSnapshot(settingsDocRef, (snapshot) => {
+            if (snapshot.exists()) {
+                globalAdminSettings = snapshot.data();
+            }
+        });
+
+        const userDocRef = doc(db, 'users', currentUsername);
+        onSnapshot(userDocRef, (snapshot) => {
+            if (snapshot.exists()) {
+                currentUserData = snapshot.data();
+                syncCurrencyAndBalance(currentUserData.country || "Nigeria", currentUserData);
+                checkDailyStreak(currentUserData);
+            }
+        });
+
+        function syncCurrencyAndBalance(country, userData) {
+            let symbol = (country === "Ghana") ? "GHS " : (country === "Cameroon" ? "XAF " : "₦");
+            let fee = (country === "Ghana") ? "220 GHS" : (country === "Cameroon" ? "13,000 XAF" : "₦14,500");
+
+            document.getElementById('mainBalance').innerText = symbol + (userData.balance || 0).toLocaleString();
+            document.getElementById('indirectIncome').innerText = symbol + (userData.indirectEarnings || 0).toLocaleString();
+            document.getElementById('countryDisplay').innerText = country.toUpperCase() + " REGION";
+            
+            const feeEl = document.getElementById('feeLabel');
+            if(feeEl) feeEl.innerText = "Activation Fee: " + fee;
+        }
+
+        function checkDailyStreak(userData) {
+            const lastClaim = userData.lastStreakTimestamp || 0;
+            const now = Date.now();
+
+            if (now - lastClaim >= DAY_IN_MS) {
+                document.getElementById('streakClaimPopup').style.display = 'flex';
+            }
+        }
+        
+        window.openStreakModal = function() {
+            const lastClaim = currentUserData?.lastStreakTimestamp || 0;
+            const now = Date.now();
+            const timePassed = now - lastClaim;
+
+            if (timePassed >= DAY_IN_MS) {
+                document.getElementById('streakClaimPopup').style.display = 'flex';
+            } else {
+                const timeRemaining = DAY_IN_MS - timePassed;
+                startStreakCountdown(timeRemaining);
+                document.getElementById('streakTimerModal').style.display = 'flex';
+            }
+        };
+
+        window.claimStreakReward = async function() {
+            const now = Date.now();
+            document.getElementById('streakClaimPopup').style.display = 'none';
+
+            try {
+                await updateDoc(userDocRef, {
+                    balance: increment(STREAK_REWARD),
+                    lastStreakTimestamp: now
+                });
+            } catch (err) {
+                console.error("Error updating streak balance:", err);
+            }
+        };
+
+        window.closeStreakTimerModal = function() {
+            document.getElementById('streakTimerModal').style.display = 'none';
+            if (countdownInterval) clearInterval(countdownInterval);
+        };
+
+        function startStreakCountdown(durationMs) {
+            if (countdownInterval) clearInterval(countdownInterval);
+
+            let remainingTime = Math.floor(durationMs / 1000);
+            
+            function updateDisplay() {
+                if (remainingTime <= 0) {
+                    clearInterval(countdownInterval);
+                    window.closeStreakTimerModal();
+                    document.getElementById('streakClaimPopup').style.display = 'flex';
+                    return;
+                }
+
+                const hours = Math.floor(remainingTime / 3600);
+                const minutes = Math.floor((remainingTime % 3600) / 60);
+                const seconds = remainingTime % 60;
+
+                document.getElementById('streakCountdown').innerText = 
+                    String(hours).padStart(2, '0') + ':' +
+                    String(minutes).padStart(2, '0') + ':' +
+                    String(seconds).padStart(2, '0');
+
+                remainingTime--;
+            }
+
+            updateDisplay();
+            countdownInterval = setInterval(updateDisplay, 1000);
+        }
+
+        window.openActivation = () => {
+            resetModal();
+            document.getElementById('activationPopup').style.display = 'flex';
+        };
+
+        window.goToPaystack = () => {
+            const userData = {
+                fullName: localStorage.getItem('fullname') || "N/A",
+                username: currentUsername,
+                email: localStorage.getItem('email') || "N/A",
+                phone: localStorage.getItem('phone') || "N/A",
+                amount: "14,500" 
+            };
+            
+            localStorage.setItem("vireon_pending_user", JSON.stringify(userData));
+            window.open("payment.html", "_blank");
+
+            document.getElementById('paymentInitial').classList.add('hidden');
+            document.getElementById('paymentVerifying').classList.remove('hidden');
+        };
+
+        window.closeActivation = () => {
+            document.getElementById('activationPopup').style.display = 'none';
+        };
+
+        window.showSocials = () => {
+            document.getElementById('paymentVerifying').classList.add('hidden');
+            document.getElementById('paymentSocials').classList.remove('hidden');
+        };
+
+        window.resetModal = () => {
+            document.getElementById('paymentInitial').classList.remove('hidden');
+            document.getElementById('paymentVerifying').classList.add('hidden');
+            document.getElementById('paymentSocials').classList.add('hidden');
+        };
+
+        window.sendProof = (platform) => {
+            const MSG = encodeURIComponent("Hello, Vireon Admin. Here is my payment receipt, please verify and activate my account.");
+            const TG_LINK = "https://t.me/coachprema"; 
+            const WA_LINK = "https://wa.me/2347012954582"; 
+            
+            if(platform === 'Telegram') window.open(`${TG_LINK}?text=${MSG}`);
+            else window.open(`${WA_LINK}?text=${MSG}`);
+        };
+
+        window.contactSupport = () => window.open("https://t.me/coachprema");
+        window.logout = () => { localStorage.clear(); window.location.href = 'login.html'; };
+
+        window.handleAction = (name) => {
+            const overlay = document.createElement('div');
+            overlay.className = 'popup-overlay';
+            overlay.style.display = 'flex';
+            overlay.innerHTML = `
+                <div class="bg-zinc-950 border border-zinc-900 p-10 rounded-[45px] w-full max-w-xs text-center shadow-2xl">
+                    <i class="fas fa-shield-halved vireon-text text-3xl mb-6"></i>
+                    <h3 class="vireon-text font-black italic mb-3 uppercase">Access Reserved</h3>
+                    <p class="text-[9px] text-zinc-500 font-bold uppercase mb-10 px-2 leading-relaxed">
+                        This ${name} feature is locked for non-activated members. Activate your Vireon account to proceed.
+                    </p>
+                    <button onclick="this.parentElement.parentElement.remove(); openActivation();" class="activate-gradient w-full py-4 rounded-2xl text-[10px] uppercase shadow-lg mb-4">
+                        Activate Status
+                    </button>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-[9px] font-black text-zinc-600 uppercase py-2">Dismiss</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        };
+
+        window.copyRef = () => {
+            const refInput = document.getElementById("refLink");
+            copyToClipboard(refInput.value, "REFERRAL LINK COPIED");
+        };
+
+        window.copyToClipboard = (text, message = "COPIED TO CLIPBOARD") => {
+            const tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-28 left-1/2 -translate-x-1/2 bg-cyan-400 text-black px-6 py-2.5 rounded-2xl text-[9px] font-black z-[3000] shadow-2xl border border-white/20";
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        };
+    </script>
+</body>
+</html>
